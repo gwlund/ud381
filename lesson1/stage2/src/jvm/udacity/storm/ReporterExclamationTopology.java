@@ -31,6 +31,7 @@ import com.lambdaworks.redis.RedisConnection;
 
 //********* BEGIN stage2 exercise part 1-of-2 ***********
 //import the random sentence spout from spout/RandomSentenceSpout (remember the semicolon!)
+import udacity.storm.spout.RandomSentenceSpout;
 
 //********** END stage 2 exercise part 1-of-2 ***********
 
