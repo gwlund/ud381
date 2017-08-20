@@ -14,7 +14,7 @@ set -euo pipefail
 sudo apt-get update -y
 
 sudo apt-get -y install default-jdk maven vim zookeeper zookeeperd redis-server \
-    python-software-properties python-pip python tree
+    python-software-properties python-pip python2.7 tree python-numpy python-pandas python-scipy python-matplotlib
 
 sudo pip install flask redis
 
