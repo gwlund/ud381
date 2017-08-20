@@ -1,0 +1,12 @@
+job_id: PH22_PS105_20170712042427
+sensor: cnrc
+number_of_strips: 32
+strip_width_nominal_mm: 3.175
+gap_width_nominal_mm: -0.01044
+strip_centers_xref_mm: 0.828865
+nan_value_floor_threshold: -76.303
+nan_value_ceiling_threshold: -75.014
+dzdxs_threshold_no_strips: 0.32
+dzdys_threshold_no_strips: 0.0391
+zs_median_filter_size: 3
+zs_gaussian_filter_sigma: .8

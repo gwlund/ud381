@@ -1,0 +1,12 @@
+job_id: PH66_PS1135_20170620233931
+sensor: cnrc
+number_of_strips: 32
+strip_width_nominal_mm: 3.175
+gap_width_nominal_mm: -0.048196875
+strip_centers_xref_mm: 0.562075
+nan_value_floor_threshold: -75.90
+nan_value_ceiling_threshold: -75.05
+dzdxs_threshold_no_strips: 0.32
+dzdys_threshold_no_strips: 0.0828
+zs_median_filter_size: 3
+zs_gaussian_filter_sigma: .8
