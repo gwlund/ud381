@@ -104,6 +104,9 @@
 		<resource>
 			<directory>src/jvm/udacity/storm</directory>
 		</resource>
+		<resource>
+			<directory>src/resources</directory>
+		</resource>
 	</resources>
     <plugins>
       <!--
@@ -135,31 +138,31 @@
       </plugin>
 
       <plugin>
-        <groupId>com.theoryinpractise</groupId>
-        <artifactId>clojure-maven-plugin</artifactId>
-        <version>1.3.12</version>
-        <extensions>true</extensions>
-        <configuration>
+          <groupId>org.eclipse.m2e</groupId>
+    		<artifactId>lifecycle-mapping</artifactId>
+    <version>1.0.0</version>
+    <configuration>
+    <lifecycleMappingMetadata>
+        <pluginExecutions>
+        <pluginExecution>
+            <pluginExecutionFilter>
+        		<groupId>com.theoryinpractise</groupId>
+        		<artifactId>clojure-maven-plugin</artifactId>
+            <versionRange>[1.3.12,)</versionRange>
+            <goals>
+                <goal>compile</goal>
+            </goals>
+            </pluginExecutionFilter>
+            <action>
+            <ignore />
+            </action>
+        </pluginExecution>
+        </pluginExecutions>
+    </lifecycleMappingMetadata>
           <sourceDirectories>
             <sourceDirectory>src/clj</sourceDirectory>
           </sourceDirectories>
         </configuration>
-        <executions>
-          <execution>
-            <id>compile</id>
-            <phase>compile</phase>
-            <goals>
-              <goal>compile</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>test</id>
-            <phase>test</phase>
-            <goals>
-              <goal>test</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
 
       <plugin>

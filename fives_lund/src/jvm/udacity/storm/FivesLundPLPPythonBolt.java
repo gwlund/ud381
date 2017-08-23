@@ -18,12 +18,12 @@ import backtype.storm.utils.Utils;
 
 import java.util.Map;
 
-public class FivesLundPLPBolt1 extends ShellBolt implements IRichBolt
+public class FivesLundPLPPythonBolt extends ShellBolt implements IRichBolt
 {
     // To output tuples from this bolt to the next stage bolts, if any
     OutputCollector _collector;
     
-    public FivesLundPLPBolt1()
+    public FivesLundPLPPythonBolt()
     {
     	super("python", "fivesbolt1.py");
     }

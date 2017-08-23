@@ -10,6 +10,7 @@ import backtype.storm.tuple.Values;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 import com.opencsv.CSVReader;
@@ -33,13 +34,15 @@ public class FivesLundPLPSpout extends BaseRichSpout
 	}
 	
 	@Override
-	public void open(Map conf TopologyContext context, SpoutOutputCollector collector)
+	public void open(Map conf, TopologyContext context, SpoutOutputCollector collector)
 	{
 		_collector = collector;
 		//TODO: Get filename from config
 		
-		locatedReader = openFile("located_profiles.csv", true);
-		profileReader = openFile("zs.csv", false);
+		System.out.println("Opening PLP Files");
+		
+		locatedReader = openFile(locatedFileName, true);
+		profileReader = openFile(profileFileName, false);
 		
 		measurementId = new AtomicLong(1);
 		linesReadLocated = new AtomicLong(0);
@@ -54,19 +57,19 @@ public class FivesLundPLPSpout extends BaseRichSpout
 		
 		if (measurementId.get() == 1)
 		{
+			System.out.println("Outputing xs");
 			values = readLine(profileReader, linesReadProfile);
-			//TODO: Emit X-values
-			//_collector.emit(new Values(values),id);
+			_collector.emit("xs", new Values(values));
 			
 		}
 		
 		values = readLine(profileReader, linesReadProfile);
 		//TODO: Emit Z-values
-		//_collector.emit(new Values(values),id);
+		_collector.emit("zs", new Values(values));
 		
 		values = readLine(locatedReader, linesReadLocated);
 		//TODO: Emit located-values
-		//_collector.emit(new Values(values),id);
+		_collector.emit("located", new Values(values));
 		
 		measurementId.incrementAndGet();
 			
@@ -84,32 +87,64 @@ public class FivesLundPLPSpout extends BaseRichSpout
 		System.err.println("Failed tuple with id "+id);
 	}
 	
-	  @Override
-	  public void declareOutputFields(OutputFieldsDeclarer declarer) {
-	    try {
-	      CSVReader reader = new CSVReader(new FileReader(fileName), separator);
-	      // read csv header to get field info
-	      String[] fields = reader.readNext();
-	      if (includesHeaderRow) {
-	        System.out.println("DECLARING OUTPUT FIELDS");
-	        for (String a : fields)
-	          System.out.println(a);
+	@Override
+	public void declareOutputFields(OutputFieldsDeclarer declarer) 
+	{
+		System.out.println("Declaring PLP Fields");
+		Fields profileFields = getProfileFields();
+		Fields locatedFields = getLocatedFields();
 
-	        declarer.declare(new Fields(Arrays.asList(fields)));
-	      } else {
-	        // if there are no headers, just use field_index naming convention
-	        ArrayList<String> f= new ArrayList<String>(fields.length);
-	        for (int i = 0; i < fields.length; i++) {
-	          f.add("field_"+i);
-	        }
-	        declarer.declare(new Fields(f));
-	      }
-	    } catch (Exception e) {
-	      throw new RuntimeException(e);
-	    }
-	  }
+		// Declare two streams
+		declarer.declareStream("xs", profileFields);
+		declarer.declareStream("zs", profileFields);
+		declarer.declareStream("located", locatedFields);
+
+	}
 	  
-	  public String[] readLine(CSVReader reader, AtomicLong linesRead) 
+	private Fields getLocatedFields() {
+		try {
+			System.out.println("Getting Located Field Names");
+			CSVReader reader = new CSVReader(new FileReader(locatedFileName), ',');
+			// read csv header to get field info
+			String[] fields = reader.readNext();
+
+			System.out.println("DECLARING OUTPUT FIELDS");
+
+			for (String a : fields)
+				System.out.println(a);
+
+			Fields locFields = new Fields(Arrays.asList(fields));
+			return locFields;
+
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private Fields getProfileFields() {
+		try {
+			
+			System.out.println("Getting Profile Field Names");
+			CSVReader reader = new CSVReader(new FileReader(profileFileName), ',');
+			// read csv header to get field info
+			String[] fieldNames = reader.readNext();
+
+			// if there are no headers, just use field_index naming convention
+			ArrayList<String> f = new ArrayList<String>(fieldNames.length);
+
+			for (int i = 0; i < fieldNames.length; i++) {
+				f.add("field_" + i);
+			}
+
+			Fields fields = new Fields(f);
+			return fields;
+
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public String[] readLine(CSVReader reader, AtomicLong linesRead) 
 	  {
 		  String[] line = null;
 		    try {
