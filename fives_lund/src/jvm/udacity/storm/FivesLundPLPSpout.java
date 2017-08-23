@@ -18,11 +18,14 @@ public class FivesLundPLPSpout extends BaseRichSpout
 {
 	private SpoutOutputCollector _collector;
 	
-	private static CSVReader locatedReader;
-	private static CSVReader profileReader;
-	private static AtomicLong linesReadLocated;
-	private static AtomicLong linesReadProfile;
-	private static AtomicLong measurementId;
+	private CSVReader locatedReader;
+	private CSVReader profileReader;
+	private AtomicLong linesReadLocated;
+	private AtomicLong linesReadProfile;
+	private AtomicLong measurementId;
+	
+	private String locatedFileName = "/vagrant/fives_lund/src/resources/located_profiles.csv";
+	private String profileFileName = "/vagrant/fives_lund/src/resources/zs.csv";
 	
 	public FivesLundPLPSpout()
 	{
